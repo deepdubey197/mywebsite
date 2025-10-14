@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Dubey</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Poppins from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Load Font Awesome for Icons (LinkedIn, GitHub, Mail, Thumbs Up) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJzL42R7YgHw5YfQxYJ88OQJ/A/WJ8V3uHn3X9v+Wk6uB/V2lC0A1Q3B8q4g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        /* Custom Tailwind Configuration (Extended for Social Icons) */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'linkedin-blue': '#0A66C2',
+                        'github-dark': '#181717',
+                        'mail-red': '#EA4335', /* Google Mail-like red */
+                    }
+                }
+            }
+        }
+    
+        /* --- GLOBAL STYLES & THEME VARIABLES --- */
+        :root {
+            /* DARK MODE (Default) */
+            --primary-color: #4f46e5; /* Indigo-600 */
+            --bg-color: #111827; /* Gray-900 */
+            --text-color: #f3f4f6; /* Gray-100 */
+            --card-bg: #1f2937; /* Gray-800 */
+            --border-color: #374151; /* Gray-700 */
+            --header-bg-transparent: rgba(17, 24, 39, 0.95);
+            scroll-behavior: smooth;
+        }
+
+        /* LIGHT MODE OVERRIDES */
+        .light-mode {
+            --primary-color: #3730a3; /* Indigo-700 */
+            --bg-color: #f9fafb; /* Gray-50 */
+            --text-color: #1f2937; /* Gray-800 */
+            --card-bg: #e5e7eb; /* Gray-200 */
+            --border-color: #d1d5db; /* Gray-300 */
+            --header-bg-transparent: rgba(249, 250, 251, 0.95);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Themed elements using variables */
+        .themed-card {
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+            transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .themed-card-border-l {
+             border-left: 4px solid var(--primary-color);
+        }
+        .themed-hr {
+            border-color: var(--border-color);
+            transition: border-color 0.4s ease;
+        }
+        .text-accent {
+            color: var(--primary-color);
+            transition: color 0.4s ease;
+        }
+        .text-themed-link {
+            color: var(--text-color);
+        }
+        .sticky-header {
+            background-color: var(--header-bg-transparent);
+        }
+        .nav-active {
+            color: var(--primary-color) !important;
+            font-weight: 700;
+        }
+        #hero-canvas {
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.1; 
+            cursor: pointer;
+        }
+        .content-container {
+            position: relative;
+            z-index: 10;
+        }
+        section {
+            padding: 5rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .btn-primary {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+            background-color: var(--primary-color);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.6);
+            background-color: #6366f1;
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+            transform: translateY(-2px);
+        }
+        .light-mode .btn-secondary:hover {
+            color: #ffffff;
+        }
+        .card-lift-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5); 
+            border-color: var(--primary-color) !important;
+        }
+        .themed-card-border-l.card-lift-hover:hover {
+            border-left: 4px solid var(--primary-color);
+            border-top-color: var(--primary-color) !important;
+            border-right-color: var(--primary-color) !important;
+            border-bottom-color: var(--primary-color) !important;
+        }
+        .project-card {
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease-out;
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+        }
+        .section-hidden {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .section-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        input:focus, textarea:focus {
+            border-color: var(--primary-color) !important;
+            ring-color: var(--primary-color) !important;
+        }
+        .themed-input {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+        .light-mode .themed-input {
+            background-color: #ffffff;
+        }
+        .typewriter-container {
+            display: inline-block;
+            overflow: hidden; 
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .05em;
+            border-right: .15em solid var(--primary-color);
+            max-width: 15ch; 
+            animation: 
+                type-delete-loop 8s steps(30) infinite, 
+                cursor-blink 0.75s step-end infinite;
+        }
+        @keyframes type-delete-loop {
+            0% { width: 0; }
+            25% { width: 15ch; } 
+            50% { width: 15ch; } 
+            75% { width: 0; }
+            75.01%, 100% { 
+                width: 0; 
+                border-color: transparent; 
+            }
+        }
+        @keyframes cursor-blink {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary-color); }
+        }
+        #mobile-menu {
+            transition: max-height 0.5s ease-in-out; 
+            max-height: 0;
+            overflow: hidden;
+        }
+        #mobile-menu:not(.hidden) {
+            max-height: 300px; 
+        }
+        .themed-bar {
+            background-color: currentColor; 
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        }
+        .menu-toggle-button.is-active .bar-top {
+            transform: translateY(4.5px) rotate(45deg); 
+        }
+        .menu-toggle-button.is-active .bar-middle {
+            opacity: 0; 
+            transform: scaleX(0);
+        }
+        .menu-toggle-button.is-active .bar-bottom {
+            transform: translateY(-4.5px) rotate(-45deg); 
+        }
+        .skill-tag {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            cursor: default;
+            transition: all 0.3s ease-out;
+            white-space: nowrap; 
+        }
+        .skill-tag:hover {
+            transform: scale(1.05); 
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.7); 
+        }
+        .light-mode .skill-tag:hover {
+            box-shadow: 0 0 15px rgba(55, 48, 163, 0.4); 
+        }
+        .glowing-sun {
+            transition: color 0.4s ease, filter 0.4s ease;
+            filter: none;
+        }
+        .light-mode .glowing-sun {
+            color: #f59e0b;
+            filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.9)) 
+                    drop-shadow(0 0 8px rgba(245, 158, 11, 0.5));
+        }
+        .glowing-moon {
+            transition: color 0.4s ease, filter 0.4s ease;
+            filter: none;
+            color: var(--text-color);
+        }
+        body:not(.light-mode) .glowing-moon {
+            color: #ffcc99;
+            filter: drop-shadow(0 0 4px rgba(255, 204, 153, 0.9)) 
+                    drop-shadow(0 0 8px rgba(255, 165, 0, 0.4));
+        }
+        
+        /* --- SOCIAL ICON STYLING --- */
+        .social-icon-footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px; /* Slightly smaller for footer */
+            height: 48px;
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            color: var(--text-color); /* Default text color from theme */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-icon-footer:hover {
+            transform: scale(1.15); /* Scale effect */
+            color: white !important; /* Text color change on hover */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* LinkedIn Hover (Uses custom Tailwind color) */
+        .social-icon-footer:nth-child(1):hover {
+            background-color: #0A66C2; 
+        }
+        /* GitHub Hover (Uses custom Tailwind color) */
+        .social-icon-footer:nth-child(2):hover {
+            background-color: #181717; 
+        }
+        /* Mail Hover (Uses custom Tailwind color) */
+        .social-icon-footer:nth-child(3):hover {
+            background-color: #EA4335;
+        }
+
+        @media (max-width: 600px){
+            .typewriter-container{
+                font-size: 2.5rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Firebase SDK Imports (must be type="module") -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, collection, addDoc, setDoc, updateDoc, increment, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Set log level for debugging
+        setLogLevel('debug');
+
+        // --- CONFIGURATION ---
+        const RESUME_URL = "https://drive.google.com/file/d/1B2IIIeCR-jS8piKVxPugNW9ub6pPDLh7/view?usp=sharing"; 
+        
+        // --- SOCIAL MEDIA LINKS ---
+        const LINKEDIN_URL = "https://www.linkedin.com/in/deep-d-139983126/";
+        const GITHUB_URL = "https://github.com/deepdubey197";
+        const MAIL_ADDRESS = "mailto:deepdubey197@gmail.com";
+        // ---------------------
+
+        // Global variables provided by the environment
+        //const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';  --commented 2
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfys2F0QS5Ch_tl9iRZvsVBbf09sUi2Tk",
+            authDomain: "contactform-4f0a9.firebaseapp.com",
+            databaseURL: "https://contactform-4f0a9-default-rtdb.firebaseio.com",
+            projectId: "contactform-4f0a9",
+            storageBucket: "contactform-4f0a9.firebasestorage.app",
+            messagingSenderId: "44036985342",
+            appId: "1:44036985342:web:36a8f6c01e222a22fef0af"
+        };
+
+        const appId = "1:44036985342:web:36a8f6c01e222a22fef0af";
+        //const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {}; --commented 1
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db, auth;
+        let isFirebaseReady = false;
+        
+        // --- FIREBASE PATHS ---
+        const LIKES_DOC_PATH = `/artifacts/${appId}/public/data/site_stats`;
+        const LIKES_DOC_ID = 'likes_count';
+
+        // Function to handle form submission and save to Firestore
+        window.submitContactForm = async function(event) {
+            // ... (Contact form submission logic remains the same)
+            event.preventDefault();
+            const statusElement = document.getElementById('contact-status');
+            statusElement.textContent = "Sending message...";
+            statusElement.classList.remove('text-green-500', 'text-red-500');
+            statusElement.classList.add('text-yellow-500');
+
+            if (!isFirebaseReady) {
+                statusElement.textContent = "Error: Firebase is not ready. Please try again.";
+                statusElement.classList.remove('text-yellow-500');
+                statusElement.classList.add('text-red-500');
+                return;
+            }
+
+            const form = event.target;
+            const name = form.name.value.trim();
+            const email = form.email.value.trim();
+            const message = form.message.value.trim();
+
+            if (!name || !email || !message) {
+                statusElement.textContent = "Please fill out all fields.";
+                statusElement.classList.remove('text-yellow-500');
+                statusElement.classList.add('text-red-500');
+                return;
+            }
+
+            try {
+                // Determine user ID for storage reference
+                const userId = auth.currentUser?.uid || 'anonymous';
+                // Public collection for contact messages
+                const messagesCollectionRef = collection(db, `/artifacts/${appId}/public/data/contact_messages`);
+
+                await addDoc(messagesCollectionRef, {
+                    name: name,
+                    email: email,
+                    message: message,
+                    timestamp: new Date().toISOString(),
+                    userId: userId,
+                });
+
+                statusElement.textContent = "Message sent successfully! Thank you.";
+                statusElement.classList.remove('text-yellow-500', 'text-red-500');
+                statusElement.classList.add('text-green-500');
+                form.reset();
+
+            } catch (error) {
+                console.error("Error saving document: ", error);
+                statusElement.textContent = "Error sending message. Please check the console.";
+                statusElement.classList.remove('text-yellow-500');
+                statusElement.classList.add('text-red-500');
+            }
+        };
+
+        // --- NEW: LIKES LOGIC ---
+        function updateLikeDisplay(count) {
+            const display = document.getElementById('like-count-display');
+            if (display) {
+                // Format number with commas
+                display.textContent = count.toLocaleString();
+            }
+        }
+
+        function setupLikesListener() {
+            if (!db) {
+                console.error("Firestore not initialized for likes listener.");
+                return;
+            }
+            const docRef = doc(db, LIKES_DOC_PATH, LIKES_DOC_ID);
+
+            // Set up a real-time listener for the likes document
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const currentLikes = docSnap.data().count || 0;
+                    updateLikeDisplay(currentLikes);
+                } else {
+                    // Document doesn't exist yet, initialize it
+                    setDoc(docRef, { count: 0 }).catch(e => console.error("Error initializing likes document:", e));
+                    updateLikeDisplay(0);
+                }
+            }, (error) => {
+                console.error("Error listening to likes count:", error);
+            });
+        }
+
+        window.incrementLike = async function() {
+            const button = document.getElementById('like-button');
+            if (!isFirebaseReady) {
+                console.error("Firebase not ready. Cannot increment like.");
+                return;
+            }
+            
+            if (button) {
+                button.disabled = true; // Disable button to prevent spam
+                setTimeout(() => { button.disabled = false; }, 1500); // Re-enable after 1.5s
+            }
+
+            try {
+                const docRef = doc(db, LIKES_DOC_PATH, LIKES_DOC_ID);
+                
+                // Use updateDoc with increment for atomic update
+                await updateDoc(docRef, {
+                    count: increment(1)
+                });
+                
+            } catch (error) {
+                // If the document doesn't exist, try to set it up first.
+                if (error.code === 'not-found') {
+                     try {
+                         // Attempt to create the document with the first like
+                         await setDoc(doc(db, LIKES_DOC_PATH, LIKES_DOC_ID), { count: 1 });
+                     } catch (e) {
+                         console.error("Error setting initial like document:", e);
+                     }
+                } else {
+                    console.error("Error incrementing like:", error);
+                }
+            }
+        }
+        // --- END LIKES LOGIC ---
+
+        // Function to initialize Firebase and authenticate
+        async function initializeFirebase() {
+            try {
+                if (Object.keys(firebaseConfig).length === 0) {
+                     console.error("Firebase configuration is missing. Contact form and likes will not work.");
+                     document.getElementById('contact-status').textContent = "Error: Firebase config missing.";
+                     return false;
+                }
+
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Authenticate user (mandatory for Firestore security rules)
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                
+                console.log("Firebase initialized and authenticated successfully.");
+                
+                // Call the likes listener immediately after successful initialization
+                setupLikesListener(); 
+                
+                return true;
+
+            } catch (error) {
+                console.error("Error initializing Firebase:", error);
+                document.getElementById('contact-status').textContent = "Error: Could not initialize services.";
+                return false;
+            }
+        }
+
+        initializeFirebase().then(ready => {
+            isFirebaseReady = ready;
+        });
+
+        // --- Theme Toggle Logic ---
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
+        const body = document.body;
+
+        function applyTheme(isLight) {
+            if (isLight) {
+                body.classList.add('light-mode');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'block';
+            } else {
+                body.classList.remove('light-mode');
+                moonIcon.style.display = 'block';
+                sunIcon.style.display = 'none';
+            }
+        }
+
+        window.toggleTheme = function() {
+            const isLight = body.classList.contains('light-mode');
+            const newIsLight = !isLight;
+            applyTheme(newIsLight);
+            localStorage.setItem('theme', newIsLight ? 'light' : 'dark');
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+
+            let isLightMode = false;
+
+            if (savedTheme) {
+                isLightMode = savedTheme === 'light';
+            } else {
+                isLightMode = prefersLight;
+            }
+            
+            applyTheme(isLightMode);
+        }
+
+        // --- Interactive Canvas Animation Logic (Glow Cursor) ---
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        let player = { x: 0, y: 0, size: 20, speed: 0.2 };
+        let targetX = 0;
+        let targetY = 0;
+
+        function setupCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            player.x = canvas.width / 2;
+            player.y = canvas.height / 2;
+            targetX = player.x;
+            targetY = player.y;
+        }
+
+        window.addEventListener('resize', setupCanvas);
+        setupCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            e.preventDefault(); 
+            if (e.touches.length > 0) {
+                targetX = e.touches[0].clientX;
+                targetY = e.touches[0].clientY;
+            }
+        }, { passive: false });
+
+        function update() {
+            player.x += (targetX - player.x) * player.speed;
+            player.y += (targetY - player.y) * player.speed;
+
+            if (player.x < 0) player.x = 0;
+            if (player.x > canvas.width) player.x = canvas.width;
+            if (player.y < 0) player.y = 0;
+            if (player.y > canvas.height) player.y = canvas.height;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const primaryColor = getComputedStyle(document.body).getPropertyValue('--primary-color').trim();
+
+            ctx.fillStyle = primaryColor;
+            ctx.shadowColor = primaryColor;
+            ctx.shadowBlur = 20; 
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0; 
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // --- 3D Card Tilt Logic (Remains the same) ---
+        function handleTilt(e) {
+            const card = e.currentTarget;
+            const rect = card.getBoundingClientRect();
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const tiltX = (y - centerY) / centerY; 
+            const tiltY = (x - centerX) / centerX;
+
+            const maxTilt = 8; 
+
+            const rotateX = tiltX * -maxTilt; 
+            const rotateY = tiltY * maxTilt;
+            
+            card.style.transform = `translateY(-8px) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        }
+
+        function resetTilt(e) {
+            e.currentTarget.style.transform = 'translateY(0) rotateX(0deg) rotateY(0deg)';
+        }
+
+        function initTiltEffects() {
+            const projectCards = document.querySelectorAll('.project-card');
+
+            projectCards.forEach(card => {
+                card.addEventListener('mousemove', handleTilt);
+                card.addEventListener('mouseleave', resetTilt);
+                
+                card.addEventListener('touchstart', handleTilt, { passive: true });
+                card.addEventListener('touchend', resetTilt, { passive: true });
+            });
+        }
+        
+        // --- Scroll Triggered Animation Logic (Remains the same) ---
+        function initScrollAnimations() {
+            const sections = document.querySelectorAll('section:not(#hero)'); 
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove('section-hidden');
+                        entry.target.classList.add('section-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -10% 0px',
+                threshold: 0.1 
+            });
+
+            sections.forEach(section => {
+                section.classList.add('section-hidden');
+                observer.observe(section);
+            });
+        }
+        
+        // --- Navigation Active State Logic (Remains the same) ---
+        function initNavHighlighting() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observerOptions = {
+                root: null, 
+                rootMargin: '0px 0px -70% 0px',
+                threshold: 0.0
+            };
+
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => link.classList.remove('nav-active'));
+                        
+                        const sectionId = entry.target.id;
+                        const targetIdDesktop = `nav-${sectionId}`;
+                        const targetIdMobile = `nav-${sectionId}-mobile`;
+                        
+                        const activeLinkDesktop = document.getElementById(targetIdDesktop);
+                        const activeLinkMobile = document.getElementById(targetIdMobile);
+
+                        if (activeLinkDesktop) {
+                            activeLinkDesktop.classList.add('nav-active');
+                        }
+                        if (activeLinkMobile) {
+                            activeLinkMobile.classList.add('nav-active');
+                        }
+                    }
+                });
+            };
+
+            const sectionObserver = new IntersectionObserver(observerCallback, observerOptions);
+
+            sections.forEach(section => {
+                sectionObserver.observe(section);
+            });
+        }
+
+        // --- Mobile Menu Logic (Remains the same) ---
+        window.toggleMobileMenu = function() {
+            const menu = document.getElementById('mobile-menu');
+            const button = document.getElementById('mobile-menu-button'); 
+
+            menu.classList.toggle('hidden'); 
+            button.classList.toggle('is-active'); 
+        }
+
+        window.closeMobileMenu = function() {
+            const menu = document.getElementById('mobile-menu');
+            const button = document.getElementById('mobile-menu-button');
+
+            if (!menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+                button.classList.remove('is-active'); 
+            }
+        }
+
+        window.onload = function() {
+            loadTheme();
+            gameLoop();
+            initTiltEffects(); 
+            initScrollAnimations();
+            initNavHighlighting(); 
+            
+            // Set the resume download link
+            const resumeLink = document.getElementById('resume-download-link');
+            if (resumeLink) {
+                resumeLink.href = RESUME_URL;
+                resumeLink.setAttribute('download', 'Alex_Rivera_Resume.pdf');
+            }
+            
+            // Set the social media links
+            document.getElementById('linkedin-link').href = LINKEDIN_URL;
+            document.getElementById('github-link').href = GITHUB_URL;
+            document.getElementById('mail-link').href = MAIL_ADDRESS;
+        };
+
+    </script>
+
+
+    <!-- Background Canvas for Interactive Animation -->
+    <canvas id="hero-canvas"></canvas>
+
+    <!-- Main Content Container -->
+    <div class="content-container">
+
+        <!-- Navigation (Sticky Header) - REMAINS THE SAME -->
+        <header class="sticky top-0 z-50 sticky-header backdrop-blur-sm shadow-lg transition duration-400">
+            <!-- Desktop Nav Bar -->
+            <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                <a href="#hero" class="text-2xl font-bold text-accent hover:text-indigo-300 transition duration-300">Deep's Portfolio</a>
+                
+                <div class="flex items-center space-x-4">
+                    
+                    <!-- Desktop Links (Visible on md and up) -->
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a id="nav-about" href="#about" class="nav-link text-themed-link hover:text-accent transition duration-300">About</a>
+                        <a id="nav-skills" href="#skills" class="nav-link text-themed-link hover:text-accent transition duration-300">Skills</a>
+                        <a id="nav-experience" href="#experience" class="nav-link text-themed-link hover:text-accent transition duration-300">Experience</a>
+                        <a id="nav-projects" href="#projects" class="nav-link text-themed-link hover:text-accent transition duration-300">Projects</a>
+                        <a id="nav-contact" href="#contact" class="nav-link text-themed-link hover:text-accent transition duration-300">Contact</a>
+                    </div>
+                    
+                    <!-- Theme Toggle Button -->
+                    <button id="theme-toggle" onclick="toggleTheme()" class="p-2 rounded-full text-themed-link hover:text-accent transition duration-300">
+                        <!-- Sun icon for Light Mode (with glowing-sun class) -->
+                        <svg id="sun-icon" class="w-6 h-6 glowing-sun" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <!-- Moon icon for Dark Mode (now with glowing-moon class) -->
+                        <svg id="moon-icon" class="w-6 h-6 glowing-moon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+                    
+                    <!-- Hamburger Menu Button -->
+                    <button id="mobile-menu-button" onclick="toggleMobileMenu()" class="p-2 rounded-lg md:hidden text-themed-link hover:text-accent transition duration-300 menu-toggle-button">
+                        <div class="space-y-1">
+                            <span class="block w-6 h-0.5 bar-top themed-bar"></span>
+                            <span class="block w-6 h-0.5 bar-middle themed-bar"></span>
+                            <span class="block w-6 h-0.5 bar-bottom themed-bar"></span>
+                        </div>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobile-menu" class="hidden md:hidden shadow-xl themed-card border-t" style="border-color: var(--border-color);">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <a id="nav-about-mobile" href="#about" onclick="closeMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-themed-link hover:text-accent transition duration-200">About</a>
+                    <a id="nav-skills-mobile" href="#skills" onclick="closeMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-themed-link hover:text-accent transition duration-200">Skills</a>
+                    <a id="nav-experience-mobile" href="#experience" onclick="closeMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-themed-link hover:text-accent transition duration-200">Experience</a>
+                    <a id="nav-projects-mobile" href="#projects" onclick="closeMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-themed-link hover:text-accent transition duration-200">Projects</a>
+                    <a id="nav-contact-mobile" href="#contact" onclick="closeMobileMenu()" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-themed-link hover:text-accent transition duration-200">Contact</a>
+                </div>
+            </div>
+
+        </header>
+
+        <!-- 1. Introduction/Hero Section - REMAINS THE SAME -->
+        <section id="hero" class="h-screen flex items-center justify-center text-center">
+            <div class="animate-fadeIn p-6 rounded-xl themed-card shadow-2xl backdrop-blur-sm max-w-4xl w-full"
+                 style="border: 1px solid var(--border-color);">
+                <p class="text-xl text-accent mb-2">Hello, I'm</p>
+                <!-- TYPEWRITER LOOP ANIMATION -->
+                <h1 class="text-6xl sm:text-7xl font-extrabold text-themed-link mb-4 leading-tight flex justify-center">
+                    <span class="typewriter-container">Deep Dubey</span>
+                </h1>
+                <!-- END TYPEWRITER -->
+                <p class="text-3xl font-light text-themed-link opacity-80 mb-8">
+                    A Focused <span class="text-accent font-medium">Software Developer</span>
+                </p>
+
+                <!-- RESUME BUTTONS GROUP (Responsive Layout) -->
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <!-- Primary Button: View Work -->
+                    <a href="#projects" class="inline-block px-8 py-3 text-white font-semibold rounded-full btn-primary w-full sm:w-auto">
+                        View My Work
+                    </a>
+                    <!-- Secondary Button: Download Resume -->
+                    <a id="resume-download-link" href="RESUME_URL" target="_blank" rel="noopener noreferrer" 
+                       class="inline-block px-8 py-3 font-semibold rounded-full btn-secondary w-full sm:w-auto">
+                        Download Resume
+                    </a>
+                </div>
+                <!-- END BUTTONS GROUP -->
+                
+                <p class="mt-8 text-sm opacity-60 text-themed-link">
+                    <span class="text-accent font-bold">Try me:</span> Move your <span class="font-mono">Mouse</span> or <span class="font-mono">Finger</span> over the screen to interact!
+                </p>
+            </div>
+        </section>
+
+        <!-- Separator -->
+        <hr class="max-w-4xl mx-auto border-t themed-hr my-8">
+
+        <!-- 2. About Me Section - REMAINS THE SAME -->
+        <section id="about" class="section-hidden">
+            <h2 class="text-4xl font-bold text-center mb-12 text-accent">About Me.</h2>
+            <div class="p-8 rounded-2xl shadow-xl themed-card card-lift-hover">
+                <div class="md:grid md:grid-cols-3 gap-10 items-center">
+                    <div class="col-span-2 space-y-6 opacity-90">
+                        <p class="text-lg text-themed-link">
+                            As a <u><b style="color: #4940e8;">Software Developer</b></u>, I build and deploy robust, high-performance systems with a focus on scale and reliability. I specialize in the modern AI/ML ecosystem and back-end services, leveraging <b>Microservices and SQL Databases</b> for robust data management and infrastructure.
+                        </p>
+                        <p class="text-sm opacity-70 text-themed-link">
+                            I like experimenting & building innovative things. Maybe we both can connect and build something together?
+                        </p>
+                    </div>
+                    <div class="mt-6 md:mt-0 col-span-1 flex justify-center">
+                        <div class="w-48 h-48 rounded-full flex items-center justify-center border-4 border-accent shadow-2xl themed-card">
+                            <span class="text-7xl" role="img" aria-label="Developer Icon"><img src="myself.gif" alt=""></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Separator -->
+        <hr class="max-w-4xl mx-auto border-t themed-hr my-8">
+        
+        <!-- 3. Skills Section - REMAINS THE SAME -->
+        <section id="skills" class="section-hidden">
+            <h2 class="text-4xl font-bold text-center mb-12 text-accent">Technical Skills.</h2>
+            <div class="max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 justify-items-center">
+                
+                <div class="skill-tag">React</div>
+                <div class="skill-tag">Machine Learning</div>
+                <div class="skill-tag">Java 17</div>
+                <div class="skill-tag">Spring Boot</div>
+                <div class="skill-tag">Microservices</div>
+                <div class="skill-tag">AWS</div>
+                <div class="skill-tag">Firebase</div>
+                <div class="skill-tag">Python</div>
+                <div class="skill-tag">Tailwind CSS</div>
+                <div class="skill-tag">REST APIs</div>
+                <div class="skill-tag">PostgreSQL</div>
+                <div class="skill-tag">CI/CD</div>
+            </div>
+        </section>
+
+        <!-- Separator -->
+        <hr class="max-w-4xl mx-auto border-t themed-hr my-8">
+
+        <!-- 4. Work Experience Section - REMAINS THE SAME -->
+        <section id="experience" class="section-hidden">
+            <h2 class="text-4xl font-bold text-center mb-12 text-accent">Work Experience.</h2>
+            <div class="space-y-10">
+                <div class="p-6 rounded-2xl shadow-xl themed-card themed-card-border-l card-lift-hover">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-2xl font-semibold text-themed-link">Systems Engineer</h3>
+                            <p class="text-accent text-lg">Tata Consultancy Services</p>
+                        </div>
+                        <span class="text-sm py-1 px-3 rounded-full themed-card" style="opacity: 0.7;">2025 - Present</span>
+                    </div>
+                    <ul class="list-disc ml-6 mt-4 opacity-90 space-y-2
+                     text-themed-link">
+                        <li>Developed and maintained microservices for policy servicing and new business modules using Java, Spring Boot, and JDBC for TCS BaNCS.</li>
+                        <li>Integrated PostgreSQL databases for policy data management, ensuring optimized queries and secure transaction handling.</li>
+                        <li>Participated in requirement analysis, debugging, and deployment, ensuring adherence to SLAs and code quality standards.</li>
+                    </ul>
+                </div>
+                <div class="p-6 rounded-2xl shadow-xl themed-card themed-card-border-l card-lift-hover">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-2xl font-semibold text-themed-link">Full Stack Summer Intern</h3>
+                            <p class="text-accent text-lg">HighRadius Corporation</p>
+                        </div>
+                        <span class="text-sm py-1 px-3 rounded-full themed-card" style="opacity: 0.7;">2023 - 2024</span>
+                    </div>
+                    <ul class="list-disc ml-6 mt-4 opacity-90 space-y-2 text-themed-link">
+                        <li>Built an AI Enabled Fintech B2B Invoice Management Application</li>
+                        <li>Used different regression models to predict the amount to be paid and the invoice generated.</li>
+                        <li>Developed a dashboard to visualize data and make CRUD Operations</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Separator -->
+        <hr class="max-w-4xl mx-auto border-t themed-hr my-8">
+
+        <!-- 5. Projects Section - REMAINS THE SAME -->
+        <section id="projects" class="section-hidden">
+            <h2 class="text-4xl font-bold text-center mb-12 text-accent">Featured Projects <b style="color: #f5bb1cf4;">/</b> Papers.</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Project Card 1 -->
+                <div class="project-card themed-card p-6 rounded-2xl shadow-xl border card-lift-hover" style="border-color: var(--border-color);">
+                    <h3 class="text-xl font-bold text-themed-link mb-2">AI Enabled Expense Tracker.</h3>
+                    <p class="text-accent mb-4">ReactJS, Firebase, Tesseract.js, LLM</p>
+                    <p class="opacity-90 mb-4 text-themed-link">An expense tracker web app
+with Firebase authentication for login/signup and realtime database for data storage. Integrated with <b>Google’s BERT</b> for
+automating expense entry from bill/receipt photos</p>
+                    <a href="https://github.com/deepdubey197/AI-enabled-expense-tracker.git" target="_blank" class="text-accent hover:text-indigo-300 font-semibold text-sm">View Source →</a>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="project-card themed-card p-6 rounded-2xl shadow-xl border card-lift-hover" style="border-color: var(--border-color);">
+                    <h3 class="text-xl font-bold text-themed-link mb-2">Hybrid Deep Learning Model for Anomaly Detection.</h3>
+                    <p class="text-accent mb-4">TensorFlow / Keras, Scikit-learn, Streamlit, NumPy, Pandas</p>
+                    <p class="opacity-90 mb-4 text-themed-link">A hybrid anomaly detection system using Bidirectional LSTM Autoencoder
+and Isolation Forest to identify irregular patterns in time-series data, with an interactive Streamlit dashboard for
+real-time visualization.</p>
+                    <a href="https://github.com/deepdubey197/Hybrid-Anomaly-Detection-System.git" target="_blank" class="text-accent hover:text-indigo-300 font-semibold text-sm">View Source →</a>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="project-card themed-card p-6 rounded-2xl shadow-xl border card-lift-hover" style="border-color: var(--border-color);">
+                    <h3 class="text-xl font-bold text-themed-link mb-2">Paper on Fire Smoke Detection System using Machine Learning Models</h3>
+                    <p class="text-accent mb-4">VGG16, CNN, Naïve Bayes, Decision Trees, Logistic Regression, </p>
+                    <p class="opacity-90 mb-4 text-themed-link">Using machine learning techniques, our research analyzes large sets of photos that show smoke and forest fires in order to create reliable predictive models. By means of painstaking data search, cleaning, and model optimization, we integrate remote sensing technologies to enhance predicted accuracy.</p>
+                    <a href="https://ieeexplore.ieee.org/document/10881987/authors" target="_blank" class="text-accent hover:text-indigo-300 font-semibold text-sm">View Source →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Separator -->
+        <hr class="max-w-4xl mx-auto border-t themed-hr my-8">
+
+        <!-- 6. Contact Section with Firebase Form - REMAINS THE SAME -->
+        <section id="contact" class="section-hidden">
+            <h2 class="text-4xl font-bold text-center mb-12 text-accent">Get In Touch.</h2>
+
+            <div class="p-8 rounded-2xl shadow-2xl max-w-2xl mx-auto border themed-card card-lift-hover" style="border-color: var(--border-color);">
+                <p class="text-lg opacity-90 text-themed-link mb-6 text-center">
+                    Have a project idea or a question? Send me a message!
+                </p>
+
+                <form id="contact-form" onsubmit="submitContactForm(event)" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-themed-link opacity-90 mb-1">Name</label>
+                        <input type="text" id="name" name="name" required
+                               class="w-full px-4 py-3 rounded-lg themed-input placeholder-opacity-60 focus:ring-2 transition duration-200">
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-themed-link opacity-90 mb-1">Email</label>
+                        <input type="email" id="email" name="email" required
+                               class="w-full px-4 py-3 rounded-lg themed-input placeholder-opacity-60 focus:ring-2 transition duration-200">
+                    </div>
+
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-themed-link opacity-90 mb-1">Message</label>
+                        <textarea id="message" name="message" rows="5" required
+                                  class="w-full px-4 py-3 rounded-lg themed-input placeholder-opacity-60 focus:ring-2 transition duration-200"></textarea>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full px-6 py-3 text-white font-semibold rounded-lg btn-primary shadow-lg hover:bg-indigo-700">
+                        Send Message
+                    </button>
+
+                    <p id="contact-status" class="text-center text-sm mt-4 min-h-[1.25rem]"></p>
+                </form>
+            </div>
+        </section>
+
+        <!-- Footer (Now includes Social Media Icons and Like Button) -->
+        <footer class="mt-20 py-8 border-t themed-hr text-center opacity-90 text-themed-link">
+            
+            <!-- Likes Counter and Button (NEW) -->
+            <div class="flex flex-col items-center mb-8">
+                <button id="like-button" onclick="incrementLike()" 
+                        class="px-8 py-3 text-white font-semibold rounded-full btn-primary flex items-center space-x-3 text-lg">
+                    <i class="fas fa-thumbs-up"></i>
+                    <span>Like This Portfolio</span>
+                </button>
+                <div class="text-xl font-bold mb-3 flex items-center space-x-3">
+                    <span class="text-accent">Total Likes:</span>
+                    <span id="like-count-display" class="text-3xl font-extrabold text-themed-link transition duration-300">0</span>
+                </div>
+                
+                
+            </div>
+
+            <!-- Social Icons Bar -->
+            <div class="flex justify-center space-x-6 mb-6">
+                <!-- LinkedIn Icon -->
+                <a id="linkedin-link" href="LINKEDIN_URL" target="_blank" aria-label="LinkedIn Profile"
+                   class="social-icon-footer">
+                    <i class="fab fa-linkedin-in text-2xl"></i>
+                </a>
+
+                <!-- GitHub Icon -->
+                <a id="github-link" href="GITHUB_URL" target="_blank" aria-label="GitHub Profile"
+                   class="social-icon-footer">
+                    <i class="fab fa-github text-2xl"></i>
+                </a>
+
+                <!-- Mail Icon -->
+                <a id="mail-link" href="MAIL_ADDRESS" aria-label="Send Email"
+                   class="social-icon-footer">
+                    <i class="fas fa-envelope text-2xl"></i>
+                </a>
+            </div>
+            
+            <p class="opacity-70">&copy; 2025 Deep Dubey. All rights reserved. Built with passion and Tailwind CSS.</p>
+        </footer>
+
+    </div>
+</body>
+</html>
